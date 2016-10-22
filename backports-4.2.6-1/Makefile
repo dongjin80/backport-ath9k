@@ -13,7 +13,7 @@ ifneq ($(origin KLIB), undefined)
 KMODPATH_ARG := "INSTALL_MOD_PATH=$(KLIB)"
 else
 KLIB := /lib/modules/$(shell uname -r)/
-KLIB := /lib/modules/3.19.0-66-generic/
+#KLIB := /lib/modules/3.19.0-66-generic/
 
 KMODPATH_ARG :=
 endif
