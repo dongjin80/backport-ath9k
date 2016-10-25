@@ -18,6 +18,11 @@
 
 #include "htc.h"
 
+/**** Added for spectral scan ****/
+#include "fft_data.h"
+/**** Done ****/
+
+
 MODULE_AUTHOR("Atheros Communications");
 MODULE_LICENSE("Dual BSD/GPL");
 MODULE_DESCRIPTION("Atheros driver 802.11n HTC based wireless devices");
@@ -800,6 +805,15 @@ static int ath9k_init_firmware_version(struct ath9k_htc_priv *priv)
 		 priv->fw_version_major,
 		 priv->fw_version_minor);
 
+	/**** Added for spectral scan ****/
+  	// Initialize the fft reporting state.
+  	init_spectral_scan_state(priv->ah);
+  	#ifdef USE_NETLINK
+  	init_priv_state(priv);
+  	#endif
+  	/**** Done ****/
+
+
 	/*
 	 * Check if the available FW matches the driver's
 	 * required version.
@@ -1020,6 +1034,11 @@ module_init(ath9k_htc_init);
 static void __exit ath9k_htc_exit(void)
 {
 	ath9k_hif_usb_exit();
+	/**** Added for spectral scan ****/
+        // Clean up the spectral scan reporting state.
+        exit_spectral_scan_state();
+        /**** Done ****/
+
 	pr_info("Driver unloaded\n");
 }
 module_exit(ath9k_htc_exit);
