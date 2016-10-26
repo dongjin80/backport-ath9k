@@ -684,11 +684,19 @@ static int ar9002_hw_calibrate(struct ath_hw *ah, struct ath9k_channel *chan,
 
 	/* Do NF cal only at longer intervals */
 	if (longcal || nfcal_pending) {
+		/**** Added for spectral scan ****/
+               // printk("Entering: %s  1..\n", __FUNCTION__);
+                /**** Done ****/
+ 		
 		/*
 		 * Get the value from the previous NF cal and update
 		 * history buffer.
 		 */
-		if (ath9k_hw_getnf(ah, chan)) {
+		if (ath9k_hw_getnf(ah, chan)) {	
+			/**** Added for spectral scan ****/
+                        //printk("Entering: %s  2..\n", __FUNCTION__);
+                        /**** Done ****/
+
 			/*
 			 * Load the NF from history buffer of the current
 			 * channel.
@@ -701,6 +709,10 @@ static int ar9002_hw_calibrate(struct ath_hw *ah, struct ath9k_channel *chan,
 		}
 
 		if (longcal) {
+			 /**** Added for spectral scan ****/
+                        //printk("Entering: %s  3..\n", __FUNCTION__);
+                        /**** Done ****/
+
 			ath9k_hw_start_nfcal(ah, false);
 			/* Do periodic PAOffset Cal */
 			ar9002_hw_pa_cal(ah, false);
