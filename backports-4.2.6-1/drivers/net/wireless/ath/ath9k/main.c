@@ -19,6 +19,19 @@
 #include "ath9k.h"
 #include "btcoex.h"
 
+//**** Added for spectral scan ****/
+#include "fft_data.h"
+//#define USE_PRINT_DEBUG
+
+#ifdef USE_NETLINK
+static struct ath_softc *sc_ref = NULL;
+
+void init_priv_state_softc(struct ath_softc *sc) {
+        sc_ref = sc;
+}
+#endif
+//**** Done ****/
+
 u8 ath9k_parse_mpdudensity(u8 mpdudensity)
 {
 	/*
@@ -314,11 +327,23 @@ static int ath_reset_internal(struct ath_softc *sc, struct ath9k_channel *hchan)
 
 	ath_dbg(common, CONFIG, "Reset to %u MHz, HT40: %d fastcc: %d\n",
 		hchan->channel, IS_CHAN_HT40(hchan), fastcc);
+	
+	/**** Added for spectral scan ****/
+        if (!fastcc) {
+	#ifdef USE_PRINT_DEBUG
+                printk("In: %s, !fastcc\n", __FUNCTION__);
+    	#endif
+        }
+        /**** Done ****/
 
 	r = ath9k_hw_reset(ah, hchan, caldata, fastcc);
 	if (r) {
 		ath_err(common,
 			"Unable to reset channel, reset status %d\n", r);
+
+		 /**** Added for spectral scan ****/
+                printk("In: %s, Unable to reset channel\n", __FUNCTION__);
+                /**** Done ****/
 
 		ath9k_hw_enable_interrupts(ah);
 		ath9k_queue_reset(sc, RESET_TYPE_BB_HANG);
